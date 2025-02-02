@@ -9,7 +9,7 @@ export type UserData = {
   public: number;
   followers: number;
   following: number;
-}
+};
 
 function App() {
   const [username, setUsername] = useState<string>("");
@@ -30,45 +30,37 @@ function App() {
         date: response.data.created_at,
         public: response.data.public_repos,
         followers: response.data.followers,
-        following: response.data.following
-      }
+        following: response.data.following,
+      };
       setUserData(data);
     };
     fetchData();
-  }
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const URL: string = `https://api.github.com/users/sitthata`;
-  //     const response = await axios.get(URL);
-  //     const data: UserData = {
-  //       username: response.data.login,
-  //       profile: response.data.avatar_url,
-  //       date: response.data.created_at,
-  //       public: response.data.public_repos,
-  //       followers: response.data.followers,
-  //       following: response.data.following
-  //     }
-  //     setUserData(data);
-  //   };
-
-  //   fetchData()
-  // }, []);
+  };
 
   return (
-    <div className="p-5">
-      <input
-        type="text"
-        placeholder="your username"
-        onChange={handleUsernameChange}
-        value={username}
-        className="border p-2 border-gray-500 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-      />
-      <button onClick={handleClick} className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
-        Search
-      </button>
-      <UserProfile userData={userData} />
-    </div>
+    <>
+      <div className="flex justify-center items-center h-screen">
+        <div className="flex flex-col gap-4 w-1/2">
+          <h1 className="text-4xl">Dev Finder</h1>
+          <div className="flex gap-1 w-full">
+            <input
+              type="text"
+              placeholder="your username"
+              onChange={handleUsernameChange}
+              value={username}
+              className="w-full border p-2 border-gray-500 rounded-md focus:ring-0 focus:border-transparent"
+            />
+            <button
+              onClick={handleClick}
+              className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            >
+              Search
+            </button>
+          </div>
+          <UserProfile userData={userData} />
+        </div>
+      </div>
+    </>
   );
 }
 
