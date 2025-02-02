@@ -5,7 +5,8 @@ type UserProfileProps = {
 };
 
 const UserProfile = ({ userData }: UserProfileProps) => {
-  if (!userData) {
+  if (!userData)
+   {
     return (
       <main className="grid w-full rounded-md place-items-center bg-gray-100 p-5">
         <div className="text-center">
@@ -34,10 +35,10 @@ const UserProfile = ({ userData }: UserProfileProps) => {
           <p className="text-xs">{userData.date}</p>
         </div>
       </div>
-      <div className="flex justify-between gap-0.5 text-xs bg-gray-600 text-gray-100 p-4 mt-4 rounded-md">
-        <p>Public Repos: {userData.public}</p>
-        <p>Followers: {userData.followers}</p>
-        <p>Following: {userData.following}</p>
+      <div className="flex justify-between gap-1 text-xs bg-gray-600 text-gray-100 p-4 mt-4 rounded-md">
+        <p>Public : {userData.public}</p>
+        <p>Followers : {userData.followers}</p>
+        <p>Following : {userData.following}</p>
       </div>
     </div>
   );

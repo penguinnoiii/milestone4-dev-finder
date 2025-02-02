@@ -16,23 +16,39 @@ function App() {
 
   const [userData, setUserData] = useState<UserData | null>(null);
 
+  const [error, setError] = useState<string | null>(null);
+
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
 
+  console.log(username);
+
   const handleClick = () => {
     const fetchData = async () => {
-      const URL: string = `https://api.github.com/users/${username}`;
-      const response = await axios.get(URL);
-      const data: UserData = {
-        username: response.data.login,
-        profile: response.data.avatar_url,
-        date: response.data.created_at,
-        public: response.data.public_repos,
-        followers: response.data.followers,
-        following: response.data.following,
-      };
-      setUserData(data);
+      try {
+        const URL: string = `https://api.github.com/users/${username}`;
+        const response = await axios.get(URL);
+        const data: UserData = {
+          username: response.data.login,
+          profile: response.data.avatar_url,
+          date: response.data.created_at,
+          public: response.data.public_repos,
+          followers: response.data.followers,
+          following: response.data.following,
+        };
+        setUserData(data);
+        setError(null);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 404) {
+            setError("User not found");
+          }
+        } else {
+          setError("An error occurred");
+        }
+        setUserData(null);
+      }
     };
     fetchData();
   };
@@ -41,7 +57,10 @@ function App() {
     <>
       <div className="flex justify-center items-center h-screen">
         <div className="flex flex-col gap-4 w-1/2">
-          <h1 className="text-4xl">Dev Finder</h1>
+          <div className="flex justify-between items-center w-full">
+            <h1 className="text-4xl">Dev Finder</h1>
+            <button className="w-1/5 cursor-pointer p-2 bg-gray-500 text-gray-50 rounded-md text-[7px] hover:bg-gray-700 ">dark mode</button>
+          </div>
           <div className="flex gap-1 w-full">
             <input
               type="text"
@@ -52,7 +71,7 @@ function App() {
             />
             <button
               onClick={handleClick}
-              className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="cursor-pointer p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               Search
             </button>
