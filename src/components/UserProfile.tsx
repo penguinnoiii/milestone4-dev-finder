@@ -8,11 +8,10 @@ const UserProfile = ({ userData }: UserProfileProps) => {
   if (!userData)
    {
     return (
-      <main className="grid w-full rounded-md place-items-center bg-gray-100 p-5">
+      <main className="grid w-full rounded-md place-items-center  p-5">
         <div className="text-center">
           <p className="text-base font-semibold text-blue-600">404</p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-balance text-gray-900">
-            Page not found
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight text-balance k">Page not found
           </h1>
           <p className="mt-4 text-[0.5rem] font-medium text-pretty text-gray-500">
             Sorry, we couldn’t find the page you’re looking for.
@@ -23,7 +22,7 @@ const UserProfile = ({ userData }: UserProfileProps) => {
   }
 
   return (
-    <div className="bg-gray-100 rounded-md flex flex-col w-full p-5">
+    <div className=" rounded-md flex flex-col w-full py-5">
       <div className="flex gap-4 items-center">
         <img
           src={userData.profile}
