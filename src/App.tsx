@@ -5,6 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
 import UserProfile from "./components/UserProfile";
+import ListUsername from "./components/ListUsername";
 
 export type UserData = {
   username: string;
@@ -18,6 +19,7 @@ export type UserData = {
 function App() {
   const [username, setUsername] = useState<string>("");
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [listUsernames, setListUsernames] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
@@ -65,35 +67,40 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (username.length > 0) {
-        try {
-          const URL: string = `https://api.github.com/users/${username}`;
-          const response = await axios.get(URL);
-          const data: UserData = {
-            username: response.data.login,
-            profile: response.data.avatar_url,
-            date: response.data.created_at,
-            public: response.data.public_repos,
-            followers: response.data.followers,
-            following: response.data.following,
-          };
-          setUserData(data);
-        } catch (error: unknown) {
-          if (axios.isAxiosError(error)) {
-            if (error.response?.status === 404) {
-              console.error("User not found");
-            }
-          } else {
-            console.error("An error occurred");
+      try {
+        const URL: string = `https://api.github.com/users/${username}`;
+        const response = await axios.get(URL);
+        const user = response.data.login.map((user: any) => user.login);
+        setListUsernames(user);
+        console.log(user);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 404) {
+            console.error("User not found");
           }
-          setUserData(null);
+        } else {
+          console.error("An error occurred");
         }
+        setUserData(null);
       }
     };
-    if (username) {
+
+    if (username.length > 0) {
+      setShowDropdown(true);
+    }
+
+    if (showDropdown) {
       fetchData();
     }
-  }, [username]);
+
+    const debounceTimer = setTimeout(() => {
+      fetchData();
+    }, 500);
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [username, darkMode, showDropdown]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -109,6 +116,7 @@ function App() {
             />
           </div>
           <div className="flex gap-1 w-full">
+            <ListUsername setUsername={setUsername} username={listUsernames}/>
             <input
               type="text"
               placeholder="your username"
