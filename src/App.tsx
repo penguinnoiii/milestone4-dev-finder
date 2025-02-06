@@ -19,8 +19,7 @@ export type UserData = {
 function App() {
   const [username, setUsername] = useState<string>("");
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [listUsernames, setListUsernames] = useState<string[]>([]);
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  // const [listUsernames, setListUsernames] = useState<string[]>([]);
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +46,7 @@ function App() {
           following: response.data.following,
         };
         setUserData(data);
+        console.log(data);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 404) {
@@ -65,42 +65,34 @@ function App() {
     setDarkMode((darkMode) => !darkMode);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const URL: string = `https://api.github.com/users/${username}`;
-        const response = await axios.get(URL);
-        const user = response.data.login.map((user: any) => user.login);
-        setListUsernames(user);
-        console.log(user);
-      } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 404) {
-            console.error("User not found");
-          }
-        } else {
-          console.error("An error occurred");
-        }
-        setUserData(null);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserSuggestions = async () => {
+  //     try {
+  //       const URL: string = `https://api.github.com/users/${username}`;
+  //       const response = await axios.get(URL);
+  //       const users = response.data.map((user: {login: string}) => user.login);
+  //       setListUsernames(users);
+  //       console.log(response.data);
+  //     } catch (error: unknown) {
+  //       if (axios.isAxiosError(error)) {
+  //         if (error.response?.status === 404) {
+  //           console.error("User not found");
+  //         }
+  //       } else {
+  //         console.error("An error occurred");
+  //       }
+  //       setListUsernames([]);
+  //     }
+  //   };
 
-    if (username.length > 0) {
-      setShowDropdown(true);
-    }
+  //   const debounceTimer = setTimeout(() => {
+  //     fetchUserSuggestions();
+  //   }, 500);
 
-    if (showDropdown) {
-      fetchData();
-    }
-
-    const debounceTimer = setTimeout(() => {
-      fetchData();
-    }, 500);
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [username, darkMode, showDropdown]);
+  //   return () => {
+  //     clearTimeout(debounceTimer);
+  //   };
+  // }, [username]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -116,7 +108,7 @@ function App() {
             />
           </div>
           <div className="flex gap-1 w-full">
-            <ListUsername setUsername={setUsername} username={listUsernames}/>
+            {/* <ListUsername username={username} setUsername={setUsername} options={listUsernames}/> */}
             <input
               type="text"
               placeholder="your username"

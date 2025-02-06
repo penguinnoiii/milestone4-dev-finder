@@ -1,20 +1,29 @@
 import { TextField, Autocomplete } from "@mui/material";
 
 type UserDataProps = {
-    username: string[];
-    setUsername: React.Dispatch<React.SetStateAction<string>>;
-}
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  options: string[];
+};
 
 
-function ListUsername({ username,setUsername } : UserDataProps) {
+
+function ListUsername({ username, setUsername, options }: UserDataProps) {
   return (
     <Autocomplete
-      options={username}
+      freeSolo
+      disableClearable
+      options={options}
+      value={username}
       onInputChange={(event, value) => {
         setUsername(value);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Enter Github Username" variant="standard" />
+        <TextField
+          {...params}
+          label="Search Github Username"
+          type="search"
+        />
       )}
     />
   );
